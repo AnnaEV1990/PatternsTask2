@@ -1,6 +1,7 @@
 package ru.netology.testmode.test;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,9 +40,9 @@ class AuthTest {
         $("[data-test-id=login] input").setValue(notRegisteredUser.getLogin());
         $("[data-test-id=password] input").setValue(notRegisteredUser.getPassword());
         $("button.button").click();
-         $("[date-test-id=error-notification] .notification__content")
-        .shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"), Duration.ofSeconds(10))
-        .shouldBe((Condition.visible));
+        $("[data-test-id='error-notification'] .notification__content")
+                .shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"), Duration.ofSeconds(10))
+                .shouldBe((Condition.visible));
     }
 
     @Test
@@ -51,7 +52,7 @@ class AuthTest {
         $("[data-test-id=login] input").setValue(blockedUser.getLogin());
         $("[data-test-id=password] input").setValue(blockedUser.getPassword());
         $("button.button").click();
-        $("[data-test-id='error-notification'] .notification__content")
+        SelenideElement selenideElement = $("[data-test-id='error-notification'] .notification__content")
                 .shouldHave(Condition.text("Ошибка! Пользователь заблокирован"), Duration.ofSeconds(10))
                 .shouldBe((Condition.visible));
 
@@ -66,8 +67,8 @@ class AuthTest {
         $("[data-test-id=password] input").setValue(registeredUser.getPassword());
         $("button.button").click();
         $("[data-test-id='error-notification'] .notification__content")
-        .shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"), Duration.ofSeconds(10))
-        .shouldBe((Condition.visible));
+                .shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"), Duration.ofSeconds(10))
+                .shouldBe((Condition.visible));
     }
 
     @Test
@@ -78,8 +79,9 @@ class AuthTest {
         $("[data-test-id=login] input").setValue(registeredUser.getLogin());
         $("[data-test-id=password] input").setValue(wrongPassword);
         $("button.button").click();
-        $("[data-test-id='error-notification'] .notification__content")
-                .shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"), Duration.ofSeconds(10))
-                .shouldBe((Condition.visible));
+        SelenideElement selenideElement;
+        selenideElement = Selenide.$("[data-test-id='error-notification'] .notification__content");
+        selenideElement.shouldHave(Condition.text("Ошибка! Неверно указан логин или пароль"), Duration.ofSeconds(10));
+        selenideElement.shouldBe((Condition.visible));
     }
 }
